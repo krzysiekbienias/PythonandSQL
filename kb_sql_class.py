@@ -7,15 +7,17 @@ from os import listdir
 import os
 from typing import List
 
+data_path = '/Users/krzysiekbienias/Documents/ExcelDataStore/EquityPortfolio'
+
 
 class DataCollector():
     def __init__(self, as_index, query):
         self._as_index = as_index
         self._query = query
         self.m_connection_details = self.set_connection_details()
-
         self.m_db_cursor = self.m_connection_details.cursor()
         self.mdf_from_query = self.execute_query()
+        self.engine = sqlalchemy.create_engine('mysql+pymysql://root:Numeraire2019@127.0.0.1:3306/sql_store')
 
     def set_connection_details(self):
         return mysql.connector.connect(host="127.0.0.1",
@@ -30,8 +32,14 @@ class DataCollector():
         final_df = converted_df.set_index(self._as_index)
         return final_df
 
+    def export_data_frame(self, data_frame: pd.DataFrame, table_name: str):
+        return data_frame.to_sql(name=table_name, con=self.engine, index=True, if_exists='append')
 
-class ExportDataFrame():
+    def close_conection(self):
+        self.m_connection_details.close()
+
+
+class ExcelFilesDetails():
     def __init__(self, input_path, suffix):
         self._input_path = input_path
         self._suffix = suffix
@@ -39,7 +47,6 @@ class ExportDataFrame():
         self.mls_short_names = self.short_excel_filenames()
         self.mls_tabnames = self.get_tab_excel_list()
         self.mdic_files_and_tabs = self.create_dictionary()
-        self.engine = sqlalchemy.create_engine('mysql+pymysql://root:Numeraire2019@127.0.0.1:3306/sql_store')
 
     def long_excel_filenames(self):
         return list(filter(lambda x: self._suffix in x, os.listdir(self._input_path)))
@@ -64,9 +71,6 @@ class ExportDataFrame():
     def create_dictionary(self):
         files_names_and_tabs = dict(zip(self.mls_short_names, self.mls_tab_names))
         return files_names_and_tabs
-
-    def export_data_frame(self, data_frame: pd.DataFrame, table_name: str):
-        return data_frame.to_sql(name=table_name, con=self.engine, index=True, if_exists='append')
 
 
 class CreateDataFrame:
