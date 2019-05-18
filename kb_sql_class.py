@@ -34,7 +34,7 @@ class SQLConnector():
         final_df = converted_df.set_index(self._as_index)
         return final_df
 
-    def export_data_frame(self, data_frame: pd.DataFrame, table_name: str)->pd.DataFrame:
+    def export_data_frame(self, data_frame: pd.DataFrame, table_name: str) -> pd.DataFrame:
         return data_frame.to_sql(name=table_name, con=self.engine, index=True, if_exists='append')
 
     def close_conection(self):
@@ -113,16 +113,10 @@ if __name__ == "__main__":
 
     cdf = CreateDataFrame(file_name='AAPL.xls', sheet_name='AAPL')
 
-    b_insert_ornor=False
-    if b_insert_ornor==True:
-
-        dc_check.export_data_frame(cdf.mdf,table_name='apple_stock')
+    b_insert_ornor = False
+    if b_insert_ornor == True:
+        dc_check.export_data_frame(cdf.mdf, table_name='apple_stock')
 
     dc_check.close_conection()
-
-
-
-
-
 
 print('The end of program')
