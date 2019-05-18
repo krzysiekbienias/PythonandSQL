@@ -37,8 +37,7 @@ def create_df_from_query(data_base_name,as_index):
     return final_df
 
 df_custom=create_df_from_query(data_base_name='sql_store',
-                               as_index='order_id'
-                               )
+                               as_index='order_id')
 np.random.seed(0)
 df_toimport=pd.DataFrame({'x1':np.random.random(10),'x2':np.random.random(10)})
 
