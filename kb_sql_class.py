@@ -34,7 +34,7 @@ class SQLConnector():
         final_df = converted_df.set_index(self._as_index)
         return final_df
 
-    def export_data_frame(self, data_frame: pd.DataFrame, table_name: str):
+    def export_data_frame(self, data_frame: pd.DataFrame, table_name: str)->pd.DataFrame:
         return data_frame.to_sql(name=table_name, con=self.engine, index=True, if_exists='append')
 
     def close_conection(self):
@@ -112,5 +112,6 @@ if __name__ == "__main__":
     efd = ExcelFilesDetails(input_path=data_path, suffix='.xls')
 
     cdf = CreateDataFrame(file_name='AAPL.xls', sheet_name='AAPL')
+
 
 print('The end of program')
