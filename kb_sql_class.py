@@ -9,8 +9,10 @@ from typing import List
 
 data_path = '/Users/krzysiekbienias/Documents/ExcelDataStore/EquityPortfolio'
 
+os.chdir(data_path)
 
-class DataCollector():
+
+class SQLConnector():
     def __init__(self, as_index, query):
         self._as_index = as_index
         self._query = query
@@ -43,9 +45,9 @@ class ExcelFilesDetails():
     def __init__(self, input_path, suffix):
         self._input_path = input_path
         self._suffix = suffix
-        self.mls_whole_name = self.long_excel_names()
+        self.mls_whole_name = self.long_excel_filenames()
         self.mls_short_names = self.short_excel_filenames()
-        self.mls_tabnames = self.get_tab_excel_list()
+        self.mls_tab_names = self.get_tab_excel_list()
         self.mdic_files_and_tabs = self.create_dictionary()
 
     def long_excel_filenames(self):
@@ -93,8 +95,8 @@ class CreateDataFrame:
 
 
 if __name__ == "__main__":
-    dc_check = DataCollector(as_index='order_id',
-                             query='''select  order_id,
+    dc_check = SQLConnector(as_index='order_id',
+                            query='''select  order_id,
                               order_date,
                               first_name,
                               last_name,
@@ -106,5 +108,9 @@ if __name__ == "__main__":
                               on o.status=os.order_status_id''')
 
     df_order = dc_check.execute_query()
+
+    efd = ExcelFilesDetails(input_path=data_path, suffix='.xls')
+
+    cdf = CreateDataFrame(file_name='AAPL.xls', sheet_name='AAPL')
 
 print('The end of program')
