@@ -113,5 +113,16 @@ if __name__ == "__main__":
 
     cdf = CreateDataFrame(file_name='AAPL.xls', sheet_name='AAPL')
 
+    b_insert_ornor=False
+    if b_insert_ornor==True:
+
+        dc_check.export_data_frame(cdf.mdf,table_name='apple_stock')
+
+    dc_check.close_conection()
+
+
+
+
+
 
 print('The end of program')
