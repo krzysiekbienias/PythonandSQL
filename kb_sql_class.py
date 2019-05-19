@@ -13,7 +13,7 @@ os.chdir(data_path)
 
 
 class SQLConnector():
-    def __init__(self, as_index, query):
+    def __init__(self,query, as_index=None):
         self._as_index = as_index
         self._query = query
         self.m_connection_details = self.set_connection_details()
@@ -31,7 +31,10 @@ class SQLConnector():
         self.m_db_cursor.execute(self._query)
         self.m_db_cursor.fetchall()
         converted_df = pd.read_sql(self._query, con=self.m_connection_details)
-        final_df = converted_df.set_index(self._as_index)
+        if self._as_index!=None:
+            final_df = converted_df.set_index(self._as_index)
+        else:
+            final_df=converted_df
         return final_df
 
     def export_data_frame(self, data_frame: pd.DataFrame, table_name: str) -> pd.DataFrame:
@@ -126,11 +129,12 @@ if __name__ == "__main__":
     cdf = CreateDataFrame(file_name='GOOG.xls', sheet_name='GOOGL')
     dftoinsert = cdf.modify_columns_data_frame(columns_name='Company Name', l_fill_in='GOOG')
 #####################################################################################################
-    b_insert_ornor = True
+    b_insert_ornor = False
     if b_insert_ornor == True:
         dc_check.export_data_frame(cdf.mdf, table_name='all_stock')
 
     dc_check.close_conection()
+    print('The end of program')
 
 
-print('The end of program')
+
