@@ -82,6 +82,7 @@ class CreateDataFrame:
         self._set_index = set_index
         self.mdf = self.create_data_frame_from_excel()
 
+
     def create_data_frame_from_excel(self):
         df_from_excel = pd.read_excel(self._file_name, sheet_name=self._sheet_name)
         if self._set_index != None:
@@ -92,6 +93,15 @@ class CreateDataFrame:
 
     def get_columns(self):
         return self.mdf.columns
+
+    def modify_columns_data_frame(self,columns_name:str,l_fill_in:str)->pd.DataFrame: #TODO expand possibility to remove columns, the same with rows
+        base_data_frame=self.mdf
+        new_col=[l_fill_in]*len(base_data_frame)
+        base_data_frame[columns_name]=new_col
+        modified_df=base_data_frame
+        return modified_df
+
+
 
 
 if __name__ == "__main__":
@@ -110,13 +120,17 @@ if __name__ == "__main__":
     df_order = dc_check.execute_query()
 
     efd = ExcelFilesDetails(input_path=data_path, suffix='.xls')
+    print(efd.mdic_files_and_tabs)
 
-    cdf = CreateDataFrame(file_name='AAPL.xls', sheet_name='AAPL')
-
-    b_insert_ornor = False
+#####################################################################################################
+    cdf = CreateDataFrame(file_name='GOOG.xls', sheet_name='GOOGL')
+    dftoinsert = cdf.modify_columns_data_frame(columns_name='Company Name', l_fill_in='GOOG')
+#####################################################################################################
+    b_insert_ornor = True
     if b_insert_ornor == True:
-        dc_check.export_data_frame(cdf.mdf, table_name='apple_stock')
+        dc_check.export_data_frame(cdf.mdf, table_name='all_stock')
 
     dc_check.close_conection()
+
 
 print('The end of program')
