@@ -7,7 +7,9 @@ from os import listdir
 import os
 from typing import List
 
-from kb_sql_class import SQLConnector,ExcelFilesDetails,CreateDataFrame
+from kb_sql_class import SQLConnector
+
+from excelconnector import ExcelFilesDetails, CreateDataFrame
 
 
 if __name__ == "__main__":
