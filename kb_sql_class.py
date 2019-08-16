@@ -7,7 +7,7 @@ from os import listdir
 import os
 from typing import List
 
-data_path = '/Users/krzysiekbienias/Documents/ExcelDataStore/EquityPortfolio'
+data_path = '/Users/krzysiekbienias/Documents/ExcelDataStore/GenericStore'
 
 os.chdir(data_path)
 
@@ -105,36 +105,6 @@ class CreateDataFrame:
         return modified_df
 
 
-
-
 if __name__ == "__main__":
-    dc_check = SQLConnector(as_index='order_id',
-                            query='''select  order_id,
-                              order_date,
-                              first_name,
-                              last_name,
-                              name as status
-                              from customers c
-                              join orders o 
-                              on o.customer_id=c.customer_id 
-                              join order_statuses os
-                              on o.status=os.order_status_id''')
-
-    df_order = dc_check.execute_query()
-
-    efd = ExcelFilesDetails(input_path=data_path, suffix='.xls')
-    print(efd.mdic_files_and_tabs)
-
-#####################################################################################################
-    cdf = CreateDataFrame(file_name='GOOG.xls', sheet_name='GOOGL')
-    dftoinsert = cdf.modify_columns_data_frame(columns_name='Company Name', l_fill_in='GOOG')
-#####################################################################################################
-    b_insert_ornor = False
-    if b_insert_ornor == True:
-        dc_check.export_data_frame(cdf.mdf, table_name='all_stock')
-
-    dc_check.close_conection()
-    print('The end of program')
-
-
+    pass
 
