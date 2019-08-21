@@ -7,9 +7,7 @@ from os import listdir
 import os
 from typing import List
 
-data_path = '/Users/krzysiekbienias/Documents/ExcelDataStore/GenericStore'
 
-os.chdir(data_path)
 
 
 
