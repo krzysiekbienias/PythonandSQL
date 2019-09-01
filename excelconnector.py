@@ -8,9 +8,6 @@ import os
 from typing import List
 
 
-
-
-
 class ExcelFilesDetails():
     def __init__(self, input_path, suffix):
         self._input_path = input_path
@@ -52,7 +49,6 @@ class CreateDataFrame:
         self._set_index = set_index
         self.mdf = self.create_data_frame_from_excel()
 
-
     def create_data_frame_from_excel(self):
         df_from_excel = pd.read_excel(self._file_name, sheet_name=self._sheet_name)
         if self._set_index != None:
@@ -64,14 +60,35 @@ class CreateDataFrame:
     def get_columns(self):
         return self.mdf.columns
 
-    def modify_columns_data_frame(self,columns_name:str,l_fill_in:str)->pd.DataFrame: #TODO expand possibility to remove columns, the same with rows
-        base_data_frame=self.mdf
-        new_col=[l_fill_in]*len(base_data_frame)
-        base_data_frame[columns_name]=new_col
-        modified_df=base_data_frame
+    def modify_columns_data_frame(self, columns_name: str,
+                                  l_fill_in: str) -> pd.DataFrame:  # TODO expand possibility to remove columns, the same with rows
+        base_data_frame = self.mdf
+        new_col = [l_fill_in] * len(base_data_frame)
+        base_data_frame[columns_name] = new_col
+        modified_df = base_data_frame
         return modified_df
+
+class OutputInExcel:
+    def __init__(self,sFileName,sSheetName,sPath):
+        self._sFileName=sFileName
+        self._sSheetName=sSheetName
+        self._sPath=sPath
+
+    def createResultsToPresent(self,dfToSave,formatStyle,colRange=None)->None:
+        oDataToExcel=pd.ExcelWriter(self._sFileName,self._sSheetName,engine='xlsxwriter')
+        dfToSave.to_excel(oDataToExcel,sheet_name=self._sSheetName)
+        workbook=oDataToExcel.book
+        worksheet=oDataToExcel.sheets[self._sSheetName]
+        if(formatStyle=='percentage'):
+            fixedFormat=workbook.add_format({'num_format':'0%'})
+            worksheet.set_column(colRange,None,fixedFormat)
+        oDataToExcel.save()
+        if (formatStyle == 'CommaFormat'):
+            fixedFormat = workbook.add_format({'num_format': '#,##0.00%'})
+            worksheet.set_column(colRange, None, fixedFormat)
+        oDataToExcel.save()
+
 
 
 if __name__ == "__main__":
     pass
-
