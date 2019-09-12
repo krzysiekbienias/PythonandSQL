@@ -60,6 +60,9 @@ class CreateDataFrame:
     def get_columns(self):
         return self.mdf.columns
 
+    def get_dimension(self):
+        return self.mdf.shape
+
     def modify_columns_data_frame(self, columns_name: str,
                                   l_fill_in: str) -> pd.DataFrame:  # TODO expand possibility to remove columns, the same with rows
         base_data_frame = self.mdf

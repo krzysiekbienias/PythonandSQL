@@ -9,13 +9,13 @@ from typing import List
 from six import string_types
 
 
-class SQLConnector():
+class SQLConnector:
     def __init__(self):
         self.m_connection_details = self.set_connection_details()
         self.m_db_cursor = self.m_connection_details.cursor()
         # self.mdf_from_query = self.execute_query()
         self.engine = sqlalchemy.create_engine('mysql+pymysql://root:Numeraire2019@127.0.0.1:3306/sql_store')
-        self.df = self.testQuery(date='2014-05-19')
+        #self.df = self.testQuery(date='2014-05-19')
 
     def set_connection_details(self):
         return mysql.connector.connect(host="127.0.0.1",
