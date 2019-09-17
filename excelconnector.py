@@ -9,7 +9,7 @@ from typing import List
 
 
 class ExcelFilesDetails():
-    def __init__(self, input_path, suffix):
+    def __init__(self, input_path:str, suffix:str):
         self._input_path = input_path
         self._suffix = suffix
         self.mls_whole_name = self.long_excel_filenames()
@@ -17,10 +17,10 @@ class ExcelFilesDetails():
         self.mls_tab_names = self.get_tab_excel_list()
         self.mdic_files_and_tabs = self.create_dictionary()
 
-    def long_excel_filenames(self):
+    def long_excel_filenames(self)->List[str]:
         return list(filter(lambda x: self._suffix in x, os.listdir(self._input_path)))
 
-    def short_excel_filenames(self):
+    def short_excel_filenames(self)->List[str]:
         ls_whole_names = list(filter(lambda x: self._suffix in x, os.listdir(self._input_path)))
         ls_short_names = []
         for i in range(len(ls_whole_names)):
@@ -29,7 +29,7 @@ class ExcelFilesDetails():
             ls_short_names.append(s_ticker)
         return ls_short_names
 
-    def get_tab_excel_list(self):
+    def get_tab_excel_list(self)->List[str]:
         tab_list = []
         for i in range(len(self.mls_whole_name)):
             xlsx = pd.ExcelFile(self.mls_whole_name[i])
@@ -37,9 +37,14 @@ class ExcelFilesDetails():
             tab_list.append(ls_file_sheets)
         return tab_list
 
-    def create_dictionary(self):
+    def create_dictionary(self)->dict:
         files_names_and_tabs = dict(zip(self.mls_short_names, self.mls_tab_names))
         return files_names_and_tabs
+
+    def dataFrameSumary(self)->pd.DataFrame():
+        return pd.DataFrame.from_dict(self.create_dictionary(),orient='index')
+
+
 
 
 class CreateDataFrame:
@@ -57,8 +62,8 @@ class CreateDataFrame:
         else:
             return df_from_excel
 
-    def get_columns(self):
-        return self.mdf.columns
+    def get_columns(self)->List[str]:
+        return list(self.mdf.columns)
 
     def get_dimension(self):
         return self.mdf.shape

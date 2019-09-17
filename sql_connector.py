@@ -31,7 +31,7 @@ def create_df_from_query(data_base_name,as_index):
 
     db_cursor.fetchall()
     converted_df=pd.read_sql(s_query,con=db_connection)
-    final_df=converted_df.set_index(as_index)
+
 
     db_connection.close()
     return final_df

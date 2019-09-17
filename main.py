@@ -19,9 +19,10 @@ if __name__ == "__main__":
     os.chdir(data_path)
     excel_details = ExcelFilesDetails(input_path=data_path, suffix='.xls')
     print(f'W have the following Excel Files {excel_details.long_excel_filenames()}')
-    print(f'W have the dictionaries Excel Files {excel_details.create_dictionary()}')
+
     #In rows we have files and cells are tabs
-    dfOfExcel=pd.DataFrame.from_dict(excel_details.create_dictionary(),orient='index')
+    print(f'We have following Excel Files and tabs in this location \n{excel_details.dataFrameSumary()}')
+
 
 
     dc_check.close_conection()
