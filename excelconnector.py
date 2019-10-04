@@ -48,19 +48,29 @@ class ExcelFilesDetails():
 
 
 class CreateDataFrame:
-    def __init__(self, file_name: str, sheet_name: str, set_index=None):
+    def __init__(self, file_name: str, sheet_name=None, set_index=None):
         self._file_name = file_name
         self._sheet_name = sheet_name
         self._set_index = set_index
         self.mdf = self.create_data_frame_from_excel()
 
     def create_data_frame_from_excel(self):
-        df_from_excel = pd.read_excel(self._file_name, sheet_name=self._sheet_name)
-        if self._set_index != None:
-            df_from_excel = pd.read_excel(self._file_name, sheet_name=self._sheet_name)
-            return df_from_excel.set_index(self._set_index)
+        listOfDfs=[]
+        if self._sheet_name==None:
+            dfsFromExcel=pd.read_excel(self._file_name,sheet_name=None)
+            lTabs=list(dfsFromExcel)
+            for k in range(dfsFromExcel):
+                temp=pd.read_excel(self._file_name,sheet_name=lTabs[k])
+                listOfDfs.append(temp)
+            di=dict(zip(lTabs,listOfDfs))
+            return di
         else:
-            return df_from_excel
+            df_from_excel = pd.read_excel(self._file_name, sheet_name=self._sheet_name)
+            if self._set_index != None:
+                df_from_excel = pd.read_excel(self._file_name, sheet_name=self._sheet_name)
+                return df_from_excel.set_index(self._set_index)
+            else:
+                return df_from_excel
 
     def get_columns(self)->List[str]:
         return list(self.mdf.columns)

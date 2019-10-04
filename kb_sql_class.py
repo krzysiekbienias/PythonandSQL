@@ -40,7 +40,7 @@ class SQLConnector:
         df = pd.read_sql(query, con=self.m_connection_details)
         return df
 
-    def export_data_frame(self, data_frame: pd.DataFrame, table_name: str) -> pd.DataFrame:
+    def export_data_frame(self, data_frame: pd.DataFrame, table_name: str):
         return data_frame.to_sql(name=table_name, con=self.engine, index=True, if_exists='append')
 
     def close_conection(self):
