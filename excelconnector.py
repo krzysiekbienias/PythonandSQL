@@ -87,24 +87,34 @@ class CreateDataFrame:
         return modified_df
 
 class OutputInExcel:
-    def __init__(self,sFileName,sSheetName,sPath):
-        self._sFileName=sFileName
-        self._sSheetName=sSheetName
-        self._sPath=sPath
+    def __init__(self,FileName,SheetNames,Path):
+        self._sFileName=FileName
+        self._lsSheetName=SheetNames
+        self._sPath=Path
 
-    def createResultsToPresent(self,dfToSave,formatStyle,colRange=None)->None:
-        oDataToExcel=pd.ExcelWriter(self._sFileName,self._sSheetName,engine='xlsxwriter')
-        dfToSave.to_excel(oDataToExcel,sheet_name=self._sSheetName)
-        workbook=oDataToExcel.book
-        worksheet=oDataToExcel.sheets[self._sSheetName]
-        if(formatStyle=='percentage'):
-            fixedFormat=workbook.add_format({'num_format':'0%'})
-            worksheet.set_column(colRange,None,fixedFormat)
-        oDataToExcel.save()
-        if (formatStyle == 'CommaFormat'):
-            fixedFormat = workbook.add_format({'num_format': '#,##0.00%'})
-            worksheet.set_column(colRange, None, fixedFormat)
-        oDataToExcel.save()
+    def createResultsToPresent(self,ldfToSave,formatStyle,colRange=None)->None:
+        if len(self._lsSheetName)==1 and len(ldfToSave)==1:
+            oDataToExcel=pd.ExcelWriter(self._sFileName,self._lsSheetName[0],engine='xlsxwriter')
+            ldfToSave.to_excel(oDataToExcel,sheet_name=self._lsSheetName[0])
+            workbook=oDataToExcel.book
+            worksheet=oDataToExcel.sheets[self._lsSheetName[0]]
+            if(formatStyle=='percentage'):
+                fixedFormat=workbook.add_format({'num_format':'0%'})
+                worksheet.set_column(colRange,None,fixedFormat)
+            oDataToExcel.save()
+            if (formatStyle == 'CommaFormat'):
+                fixedFormat = workbook.add_format({'num_format': '#,##0.00%'})
+                worksheet.set_column(colRange, None, fixedFormat)
+            oDataToExcel.save()
+        else:
+            oDataToExcel = pd.ExcelWriter(self._sFileName, engine='xlsxwriter')
+            for i in range(len(ldfToSave)):
+                ldfToSave[i].to_excel(oDataToExcel,sheet_name=self._lsSheetName[i])
+                oDataToExcel.save()
+
+
+
+
 
 
 
