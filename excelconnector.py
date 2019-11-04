@@ -73,10 +73,26 @@ class CreateDataFrame:
                 return df_from_excel
 
     def get_columns(self)->List[str]:
-        return list(self.mdf.columns)
+        llsColumns=[]
+        if type(self.mdf) is dict:
+            for i in self.mdf.keys():
+                temp=list(self.mdf[i].columns)
+                llsColumns.append(temp)
+        else:
+            return self.mdf.columns
+        return llsColumns
 
     def get_dimension(self):
-        return self.mdf.shape
+        ltShapes=[] #list of touples
+        if type(self.mdf) is dict:
+            for i in self.mdf.keys():
+                temp = list(self.mdf[i].shape)
+                ltShapes.append(temp)
+        else:
+            return self.mdf.shape
+
+        return ltShapes
+
 
     def modify_columns_data_frame(self, columns_name: str,
                                   l_fill_in: str) -> pd.DataFrame:  # TODO expand possibility to remove columns, the same with rows
