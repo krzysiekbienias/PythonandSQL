@@ -23,7 +23,10 @@ if __name__ == "__main__":
     #In rows we have files and cells are tabs
     print(f'We have following Excel Files and tabs in this location \n{excel_details.dataFrameSumary()}')
 
+    controlPath = '/Users/krzysiekbienias/Downloads/ControlFiles'
+    os.chdir(controlPath)
 
+    loadControlFile = CreateDataFrame(file_name='BlackScholes.xlsx')
 
     dc_check.close_conection()
     print('The end of program')

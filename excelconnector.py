@@ -59,7 +59,7 @@ class CreateDataFrame:
         if self._sheet_name==None:
             dfsFromExcel=pd.read_excel(self._file_name,sheet_name=None)
             lTabs=list(dfsFromExcel)
-            for k in range(dfsFromExcel):
+            for k in range(len(lTabs)):
                 temp=pd.read_excel(self._file_name,sheet_name=lTabs[k])
                 listOfDfs.append(temp)
             di=dict(zip(lTabs,listOfDfs))
@@ -108,9 +108,13 @@ class OutputInExcel:
         self._lsSheetName=SheetNames
         self._sPath=Path
 
-    def createResultsToPresent(self,ldfToSave,formatStyle,colRange=None)->None:
-        if len(self._lsSheetName)==1 and len(ldfToSave)==1:
-            oDataToExcel=pd.ExcelWriter(self._sFileName,self._lsSheetName[0],engine='xlsxwriter')
+    def createResultsToPresent(self,ldfToSave,formatStyle=None,colRange=None)->None:
+        if not os.path.isdir(self._sPath):
+            os.makedirs(self._sPath)
+            os.chdir(self._sPath)
+        if len(self._lsSheetName)==1 and type(ldfToSave)==pd.DataFrame():
+
+            oDataToExcel=pd.ExcelWriter(self._sFileName,engine='xlsxwriter')
             ldfToSave.to_excel(oDataToExcel,sheet_name=self._lsSheetName[0])
             workbook=oDataToExcel.book
             worksheet=oDataToExcel.sheets[self._lsSheetName[0]]
@@ -122,11 +126,18 @@ class OutputInExcel:
                 fixedFormat = workbook.add_format({'num_format': '#,##0.00%'})
                 worksheet.set_column(colRange, None, fixedFormat)
             oDataToExcel.save()
+            oDataToExcel.close()
         else:
-            oDataToExcel = pd.ExcelWriter(self._sFileName, engine='xlsxwriter')
-            for i in range(len(ldfToSave)):
-                ldfToSave[i].to_excel(oDataToExcel,sheet_name=self._lsSheetName[i])
-                oDataToExcel.save()
+            if not os.path.isdir(self._sPath):
+                os.makedirs(self._sPath)
+                oDataToExcel = pd.ExcelWriter(self._sFileName, engine='xlsxwriter')
+                for i in range(len(ldfToSave)):
+                    ldfToSave[i].to_excel(oDataToExcel,sheet_name=self._lsSheetName[i])
+                    oDataToExcel.save()
+                    oDataToExcel.close()
+
+
+
 
 
 
