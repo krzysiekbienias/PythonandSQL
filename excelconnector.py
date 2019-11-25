@@ -6,6 +6,7 @@ import sqlalchemy
 from os import listdir
 import os
 from typing import List
+from openpyxl import load_workbook
 
 
 class ExcelFilesDetails():
@@ -136,13 +137,11 @@ class OutputInExcel:
                     oDataToExcel.save()
                     oDataToExcel.close()
 
-
-
-
-
-
-
-
+    def loadWorkbook(self,cellLocation,value):
+        fileForUploading=load_workbook(self._sFileName)
+        sheet=fileForUploading.active
+        sheet[cellLocation]=value #cellLocation=A2
+        fileForUploading.save(fileForUploading)
 
 
 if __name__ == "__main__":
